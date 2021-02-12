@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd xmeme/backend
+cd backend
 
 
 # Setup DB or any other environment variables you want to setup.
