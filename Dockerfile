@@ -7,7 +7,7 @@ WORKDIR /home/xmeme
 COPY backend/requirements.txt requirements.txt
 RUN python -m venv venv
 RUN apk update && apk add libpq
-RUN apk add --virtual .build-deps cc python3-dev musl-dev postgresql-dev
+RUN apk add --virtual .build-deps gcc python3-dev musl-dev postgresql-dev
 RUN venv/bin/pip install -r requirements.txt
 
 COPY backend/api api
