@@ -1,0 +1,173 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "A web application to share memes",
+        "version": "1.0.0",
+        "title": "XMeme"
+    },
+    "tags": [
+        {
+            "name": "XMeme API",
+            "description": "API for sharing, viewing or editing memes on XMeme"
+        }
+    ],
+    "paths": {
+        "/memes": {
+            "get":{
+                "tags": [
+                    "XMeme API"
+                ],
+                "summary": "Returns a list of latest 100 memes from the database or empty list if database is empty",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post":{
+                "tags": [
+                    "XMeme API"
+                ],
+                "summary": "Adds a new meme entry to the database",
+                "requestBody": {
+                    "description": "Meme Request Post Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/memePostRequestBody"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "409": {
+                        "description": "Failed. Duplicate meme details"
+                    }
+                }
+            }
+        },
+        "/memes/{id}": {
+            "get":{
+                "tags": [
+                    "XMeme API"
+                ],
+                "summary": "Returns details of meme with given id as json response",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID of requested meme",
+                        "schema": {
+                            "$ref": "#/components/schemas/id"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Failed. Meme not found."
+                    }
+                }
+            },
+            "patch":{
+                "tags": [
+                    "XMeme API"
+                ],
+                "summary": "Edit the URL or caption for the meme with given id",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID of meme to be updated",
+                        "schema": {
+                            "$ref": "#/components/schemas/id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Meme Edit Request Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/memeEditRequestBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Failed. Bad request data."
+                    },
+                    "409": {
+                        "description": "Failed. Meme with given details already exists"
+                    },
+                    "500": {
+                        "description": "Something went wrong on the server. Try again."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "id": {
+                "properties": {
+                    "uuid": {
+                        "type": "number"
+                    }
+                }
+            },
+            "memePostRequestBody": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "format": "string"
+                    },
+                    "caption": {
+                        "type": "string",
+                        "format": "string"
+                    },
+                    "url": {
+                        "type": "string",
+                        "format": "uri"
+                    }
+                }
+            },
+            "memeEditRequestBody": {
+                "type": "object",
+                "properties": {
+                    "caption": {
+                        "type": "string",
+                        "format": "string"
+                    },
+                    "url": {
+                        "type": "string",
+                        "format": "uri"
+                    }
+                }
+            }
+        }
+    }
+}

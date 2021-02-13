@@ -6,6 +6,7 @@ class Meme(db.Model):
     caption = db.Column(db.String(1000))
     url = db.Column(db.String(1000))
 
+    # method to convert a meme data to json and return it when asked for
     def memeToJson(self):
         data = {
             'id': self.id,
