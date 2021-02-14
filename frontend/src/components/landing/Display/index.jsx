@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { ThemeContext } from "providers/ThemeProvider";
 import { Container, Card } from "components/common";
 import axios from "axios";
 import { Wrapper, Grid, Item, Content } from "./styles";
 import notFound from "assets/images/memeNotFound.png";
 
 export const Display = () => {
-  const { theme } = 'dark';
+  const { theme } = useContext(ThemeContext);
   const [memes, setMemes] = useState([]);
   useEffect(() => {
     axios
@@ -24,7 +25,7 @@ export const Display = () => {
       {memes.length > 0}
       <Grid>
         {memes.map((node) => (
-          <Item>
+          <Item theme={theme}>
             <Card theme={theme}>
               <Content>
                 <h4>{node.name}</h4>

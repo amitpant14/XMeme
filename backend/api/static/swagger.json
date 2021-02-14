@@ -40,9 +40,6 @@
                         }
                     }
                 },
-                "produces": [
-                    "application/json"
-                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -72,9 +69,6 @@
                             "$ref": "#/components/schemas/id"
                         }
                     }
-                ],
-                "produces": [
-                    "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -118,6 +112,9 @@
                     },
                     "400": {
                         "description": "Failed. Bad request data."
+                    },
+                    "404": {
+                        "description": "Failed. Meme with given id not found."
                     },
                     "409": {
                         "description": "Failed. Meme with given details already exists"

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from 'providers/ThemeProvider';
 import { GatsbySeo } from 'gatsby-plugin-next-seo';
 import { Global } from './styles';
+import { Header } from 'components/landing';
 
 import './fonts.css';
 
@@ -13,6 +14,7 @@ export const Layout = ({ children }) => {
   }, []);
   return (
     <>
+      <Header />
       <GatsbySeo
         title={"XMeme"}
         description="A Meme sharing full-stack application"

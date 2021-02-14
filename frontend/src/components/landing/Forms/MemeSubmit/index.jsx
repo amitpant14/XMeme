@@ -16,9 +16,9 @@ export default () => (
         success: false,
       }}
       validationSchema={Yup.object().shape({
-        name: Yup.string().required('Full name is mandatory'),
-        caption: Yup.string().required('Caption is mandatory'),
-        url: Yup.string().url('Please enter a valid url').required('URL is mandatory'),
+        name: Yup.string().trim().required('Full name is mandatory'),
+        caption: Yup.string().trim().required('Caption is mandatory'),
+        url: Yup.string().trim().url('Please enter a valid url').required('URL is mandatory'),
       })}
       onSubmit={async ({ name, caption, url }, { setSubmitting, resetForm, setFieldValue }) => {
         try {

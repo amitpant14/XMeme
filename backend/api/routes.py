@@ -3,24 +3,45 @@ from api import app, db
 from api.models import Meme
 import json
 import validators
+import mimetypes
+
+#function to validate name
+def isValidName(name):
+    if type(name) != type("") or name == '':
+        return False
+    return True
+
+#function to validate caption
+def isValidCaption(caption):
+    if type(caption) != type("") or caption == '':
+        return False
+    return True
 
 #function to validate a url
 def isValidUrl(url):
-    if validators.url(url) == True:
-        return True
-    return False
+    mimetype,encoding = mimetypes.guess_type(url)
+    return (mimetype and mimetype.startswith('image'))
 
 # endpoint to post a meme 
 @app.route('/memes', methods=['POST'])
 def postMeme():
     # getting the json data from the request
     memeData = request.get_json() or {}
-    newName = memeData['name']
-    newCaption = memeData['caption']
-    newUrl = memeData['url']
-    # if url is invalid, return BAD REQUEST response
-    if not isValidUrl(newUrl):
+    reqParams = ['name', 'caption', 'url']
+    # if request contains invalid parameters or
+    # all required parameters are not obtained, return bad request error
+    if len(memeData) != 3:
         return Response(status=400)
+    for key in memeData:
+        if key not in reqParams:
+            return Response(status=400)
+    newName = memeData['name'].strip()
+    newCaption = memeData['caption'].strip()
+    newUrl = memeData['url'].strip()
+    # check if name and caption are invalid
+    if not (isValidName(newName) and isValidCaption(newCaption) and isValidUrl(newUrl)):
+        return Response(status=400)
+    # if url is invalid, return BAD REQUEST response
     # checking if the record already exists in the database
     status = Meme.query.filter_by(name=newName, caption=newCaption, url=newUrl).first()
     # if already present, returning 409 - CONFLICT response code
@@ -82,10 +103,10 @@ def updateMemeWithId(id):
             if key != 'url' and key != 'caption':
                 return Response(status=400)
     # setting newUrl and newCaption to the new entries that are to be updated, or the previous one if not found
-    newUrl = newMemeData['url'] if 'url' in newMemeData else reqMeme.url
-    newCaption = newMemeData['caption'] if 'caption' in newMemeData else reqMeme.caption
+    newUrl = newMemeData['url'].strip() if 'url' in newMemeData else reqMeme.url
+    newCaption = newMemeData['caption'].strip() if 'caption' in newMemeData else reqMeme.caption
     # if url is invalid, return BAD REQUEST response
-    if not isValidUrl(newUrl):
+    if not (isValidCaption(newCaption) and isValidUrl(newUrl)):
         return Response(status=400)
     # checking if similar entry is already present, returning conflict error code if True
     similarMeme = Meme.query.filter_by(name=reqMeme.name, caption=newCaption, url=newUrl).first()
